@@ -1,22 +1,20 @@
-from openpyxl import Workbook
-from openpyxl import load_workbook
-import os
+from modules.excel import Excel
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
 
 # Excel dosyasını oluşturalım
-excel_file = "linkedin_posts.xlsx"
-if os.path.exists(excel_file):  # eğer dosya varsa
-    wb = load_workbook(excel_file)
-    ws = wb.active
-else:  # eğer dosya yoksa
-    wb = Workbook()
-    ws = wb.active
-    ws.append([
-        "Owner Name",
-        "Owner URL",
-        "Date",
-        "Text",
-        "Shared Text",
-    ])
+xl = Excel("linkedin_posts.xlsx")
+xl.write_header([
+    "Owner Name",
+    "Owner URL",
+    "Date",
+    "Text",
+    "Shared Text",
+])
 
+# tarayıcıyı çalıştır ve LinkedIn'e giriş yap
+driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+driver.get('https://linkedin.com')
 
-wb.save(excel_file)
+xl.save()
