@@ -1,3 +1,9 @@
 .idea
+
+# LinkedIn verileri excel dosyası
 linkedin_posts.xlsx
 modules/__pycache__
+__pycache__
+
+# ayarlar dosyası
+settings.py
