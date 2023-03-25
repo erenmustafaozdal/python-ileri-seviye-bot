@@ -1,7 +1,5 @@
 from modules.excel import Excel
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-from webdriver_manager.chrome import ChromeDriverManager
+from modules.browser import Browser
 from selenium.webdriver.common.by import By
 from time import sleep
 from settings import linkedin_email, linkedin_password
@@ -17,8 +15,7 @@ xl.write_header([
 ])
 
 # tarayıcıyı çalıştır ve LinkedIn'e giriş yap
-driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
-driver.maximize_window()
+driver = Browser().get()
 # LinkedIn oturum açma sayfasına gidelim
 driver.get('https://www.linkedin.com/login')
 
