@@ -20,6 +20,9 @@ driver = Browser().get()
 linkedin = LinkedIn(driver)
 linkedin.login(linkedin_email, linkedin_password)
 
+# Şirket kullanıcı adı verildiğinde gönderilerini al
+posts = linkedin.get_company_posts("servicenow")
+
 sleep(5)
 
 xl.save()

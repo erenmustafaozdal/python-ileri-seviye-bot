@@ -4,6 +4,10 @@ from selenium.webdriver.common.by import By
 
 class LinkedIn:
 
+    # SEÇİCİLER
+    company_name = "//h1[contains(@class, 'ember-view')]"
+    post_title = "//div[contains(@class, 'update-components-actor__meta')]"
+
     def __init__(self, driver: Chrome):
         self.driver = driver
 
@@ -23,3 +27,20 @@ class LinkedIn:
             add_phone.find_element(By.XPATH, ".//button[contains(@class, 'secondary-action')]").click()
         except:
             print("LinkedIn giriş işlemi başarılı.")
+
+    def get_company_posts(self, company):
+        # Şirketin profiline git
+        self.driver.get(f"https://www.linkedin.com/company/{company}/posts")
+
+        # Şirketin adını al
+        company_name = self.driver.find_element(By.XPATH, self.company_name).text
+
+        # gönderileri al
+        post_titles = self.driver.find_elements(By.XPATH, self.post_title)
+
+        # Gönderiler içinde döngüye girelim
+        for title in post_titles:
+            pass
+            # todo: Gönderinin tarihi seçicisi
+            # todo: Gönderinin metni seçicisi
+
