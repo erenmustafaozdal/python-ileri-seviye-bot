@@ -5,6 +5,11 @@ from selenium.webdriver.common.by import By
 class LinkedIn:
 
     # SEÇİCİLER
+    # post = //div[contains(@class,'occludable-update')]
+    # post_owner_link = //a[contains(@class, 'update-components-actor__container-link')]
+    # post_owner = //span[contains(@class, 'update-components-actor__name')]
+    # post_date = //span[contains(@class, 'update-components-actor__sub-description')]
+    # post_text = //div[contains(@class, 'feed-shared-update-v2__description-wrapper')]
     company_name = "//h1[contains(@class, 'ember-view')]"
     post_title = "//div[contains(@class, 'update-components-actor__meta')]"
 
