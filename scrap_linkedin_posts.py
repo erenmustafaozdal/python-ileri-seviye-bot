@@ -23,6 +23,9 @@ linkedin.login(linkedin_email, linkedin_password)
 # Şirket kullanıcı adı verildiğinde gönderilerini al
 posts = linkedin.get_company_posts("servicenow")
 
+# Gönderileri Excel'e yaz
+xl.write_rows(posts)
+
 sleep(5)
 
 xl.save()
