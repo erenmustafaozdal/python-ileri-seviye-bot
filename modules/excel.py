@@ -20,5 +20,9 @@ class Excel:
         if not self.is_exists:
             self.ws.append(headers)
 
+    def write_rows(self, rows):
+        for row in rows:
+            self.ws.append(row)
+
     def save(self):
         self.wb.save(self.file)
