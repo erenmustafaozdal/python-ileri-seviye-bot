@@ -1,6 +1,7 @@
 from selenium.webdriver import Chrome
 from selenium.webdriver.common.by import By
-from time import sleep
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as ec
 
 
 class LinkedIn:
@@ -12,6 +13,7 @@ class LinkedIn:
     post_date = ".//span[contains(@class, 'update-components-actor__sub-description')]"
     post_text = ".//div[contains(@class, 'feed-shared-update-v2__description-wrapper')]//div[contains(@class, 'update-components-text')]"
     load_button = "//button[contains(@class, 'scaffold-finite-scroll__load-button')]"
+    loader = "//div[contains(@class, 'artdeco-loader')]"
 
     def __init__(self, driver: Chrome):
         self.driver = driver
@@ -42,7 +44,14 @@ class LinkedIn:
             except:
                 self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
 
-            sleep(5)
+            # selenium bekleme nesnesi ile şart sağlanana kadar bekleme işlemi
+            # sayfaya tüm gönderiler yüklendiğinde eleman bulunmazsa devam et
+            try:
+                WebDriverWait(self.driver, 30).until(
+                    ec.invisibility_of_element_located((By.XPATH, self.loader))
+                )
+            except:
+                pass
 
             posts = self.driver.find_elements(By.XPATH, self.post)
             print(f"Toplam gönderi sayısı: {posts_count}")
