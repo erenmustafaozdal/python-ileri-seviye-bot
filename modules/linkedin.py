@@ -1,5 +1,6 @@
 from selenium.webdriver import Chrome
 from selenium.webdriver.common.by import By
+from time import sleep
 
 
 class LinkedIn:
@@ -10,6 +11,7 @@ class LinkedIn:
     post_owner = ".//span[contains(@class, 'update-components-actor__name')]"
     post_date = ".//span[contains(@class, 'update-components-actor__sub-description')]"
     post_text = ".//div[contains(@class, 'feed-shared-update-v2__description-wrapper')]//div[contains(@class, 'update-components-text')]"
+    load_button = "//button[contains(@class, 'scaffold-finite-scroll__load-button')]"
 
     def __init__(self, driver: Chrome):
         self.driver = driver
@@ -31,12 +33,33 @@ class LinkedIn:
         except:
             print("LinkedIn giriş işlemi başarılı.")
 
+    def infinite_scroll_get_posts(self):
+        posts_count = 0
+        while True:
+            # daha fazla yükle tuşu olduğu sürece tıkla, yoksa devam et
+            try:
+                self.driver.find_element(By.XPATH, self.load_button).click()
+            except:
+                self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+
+            sleep(5)
+
+            posts = self.driver.find_elements(By.XPATH, self.post)
+            print(f"Toplam gönderi sayısı: {posts_count}")
+
+            if posts_count == len(posts):
+                break
+
+            posts_count = len(posts)
+
+        return posts
+
     def get_company_posts(self, company):
         # Şirketin profiline git
         self.driver.get(f"https://www.linkedin.com/company/{company}/posts")
 
         # gönderileri al
-        posts = self.driver.find_elements(By.XPATH, self.post)
+        posts = self.infinite_scroll_get_posts()
 
         # Gönderiler içinde döngüye girelim
         result = []
@@ -51,7 +74,7 @@ class LinkedIn:
             except:
                 continue
 
-            # todo: dict key'ler düzeltilecek dict.values ile excel'e yazılacak
+            # dict key'ler düzeltilecek dict.values ile excel'e yazılacak
             result.append({
                 "A": post_owner_name.split("\n")[0],
                 "B": post_link.split("?")[0],
