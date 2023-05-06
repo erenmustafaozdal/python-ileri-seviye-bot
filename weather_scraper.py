@@ -5,6 +5,5 @@ from modules.mgm import MGM
 driver = Browser().get()
 # meteroloji genel müdürlüğü işlemleri
 mgm = MGM(driver)
-mgm.weather_page("istanbul", "sancaktepe")
-temp_value = mgm.get_temp_value()
-print(temp_value)
+mgm.weather_page("ankara")
+print(mgm.get_all_value())
