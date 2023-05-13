@@ -1,5 +1,7 @@
 from selenium.webdriver import Chrome
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 
 class MGM:
@@ -21,6 +23,10 @@ class MGM:
             url += f"&ilce={county}"
 
         self.driver.get(url)
+        # sayfaya gittikten sonra elemanlar yüklenene kadar bekle
+        WebDriverWait(self.driver, 30).until(
+            EC.visibility_of_element_located((By.XPATH, self.temp_icon))
+        )
 
     def get_temp_value(self):
         return self.driver.find_element(By.XPATH, self.temp_value).text + "°C"
