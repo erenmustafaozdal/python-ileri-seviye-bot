@@ -25,3 +25,8 @@ class YouTubeTranscript:
             return query.path[1:]  # https://youtu.be/Tz9W9-u_6dw
         else:
             raise ValueError
+
+    def get_transcript(self):
+        response = YouTubeTranscriptApi.get_transcript(self.id, languages=["tr", "en"])
+        transcripts = [ts["text"] for ts in response]
+        return ". ".join(transcripts)

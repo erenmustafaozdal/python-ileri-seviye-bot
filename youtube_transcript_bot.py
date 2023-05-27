@@ -14,6 +14,7 @@ Link regex: (?P<url>https?://[^\s]+)
 from settings import API_TOKEN
 from aiogram import Bot, Dispatcher, executor, types
 from modules.youtube_transcript import YouTubeTranscript
+from youtube_transcript_api._errors import NoTranscriptFound, TranscriptsDisabled
 
 bot = Bot(token=API_TOKEN)
 dp = Dispatcher(bot)
@@ -26,7 +27,20 @@ async def send_welcome(message: types.Message):
 
 @dp.message_handler(regexp='https:\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)(?:[\w\-\_]*)(&(amp;)?‌​[\w\?‌​=]*)?')
 async def yt_transcript(message: types.Message):
-    yt = YouTubeTranscript(message["text"])
+    try:
+        yt = YouTubeTranscript(message["text"])
+        ts_text = yt.get_transcript()
+
+        while ts_text:
+            ts_text_send = ts_text[:4096]
+            ts_text = ts_text[4096:]
+            await message.reply(ts_text_send)
+    except ValueError:
+        await message.reply("Lütfen YouTube adresinizi kontrol edin.")
+    except TranscriptsDisabled:
+        await message.reply("Videonun alt yazısı devredışı bırakılmış.")
+    except NoTranscriptFound:
+        await message.reply("Videonun alt yazısı bulunamadı.")
 
 
 
